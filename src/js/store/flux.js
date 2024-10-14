@@ -1,53 +1,64 @@
 const getState = ({ getStore, getActions, setStore }) => {
-    return {
-        store: {
-            contacts: [] // Almacenará los contactos que se obtendrán de la API
-        },
-        actions: {
-            // Función para cargar contactos desde la API
-            loadContacts: async (agendaSlug) => {
-                try {
-                    const response = await fetch(`/agendas/${agendaSlug}/contacts`);
-                    const data = await response.json();
-                    setStore({ contacts: data });
-                } catch (error) {
-                    console.error("Error cargando contactos:", error);
-                }
-            },
+	return {
+		store: {
+			contacts: [], // Aquí se almacenarán los contactos
+			demo: [
+				{
+					title: "FIRST",
+					background: "white",
+					initial: "white"
+				},
+				{
+					title: "SECOND",
+					background: "white",
+					initial: "white"
+				}
+			]
+		},
+		actions: {
+			exampleFunction: () => {
+				getActions().changeColor(0, "green");
+			},
 
-            // Función para agregar un nuevo contacto
-            addContact: async (agendaSlug, contactData) => {
-                try {
-                    const response = await fetch(`/agendas/${agendaSlug}/contacts`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(contactData)
-                    });
-                    if (response.ok) {
-                        getActions().loadContacts(agendaSlug); // Recargar contactos después de agregar
-                    }
-                } catch (error) {
-                    console.error("Error agregando contacto:", error);
-                }
-            },
+			loadContacts: () => {
+				// Cargar contactos desde la API
+				fetch("https://assets.breatheco.de/apis/fake/contact/agenda/your-agenda")
+					.then(response => response.json())
+					.then(data => setStore({ contacts: data }))
+					.catch(error => console.error(error));
+			},
 
-            // Función para eliminar un contacto
-            deleteContact: async (agendaSlug, contactId) => {
-                try {
-                    const response = await fetch(`/agendas/${agendaSlug}/contacts/${contactId}`, {
-                        method: 'DELETE'
-                    });
-                    if (response.ok) {
-                        getActions().loadContacts(agendaSlug); // Recargar contactos después de eliminar
-                    }
-                } catch (error) {
-                    console.error("Error eliminando contacto:", error);
-                }
-            }
-        }
-    };
+			addContact: (contact) => {
+				// Añadir contacto
+				fetch("https://assets.breatheco.de/apis/fake/contact/", {
+					method: "POST",
+					headers: { "Content-Type": "application/json" },
+					body: JSON.stringify(contact)
+				})
+				.then(response => response.json())
+				.then(() => getActions().loadContacts()) // Recargar contactos después de añadir
+				.catch(error => console.error(error));
+			},
+
+			deleteContact: (contactId) => {
+				// Eliminar contacto
+				fetch(`https://assets.breatheco.de/apis/fake/contact/${contactId}`, {
+					method: "DELETE"
+				})
+				.then(() => getActions().loadContacts()) // Recargar contactos después de eliminar
+				.catch(error => console.error(error));
+			},
+
+			changeColor: (index, color) => {
+				const store = getStore();
+				const demo = store.demo.map((elm, i) => {
+					if (i === index) elm.background = color;
+					return elm;
+				});
+				setStore({ demo: demo });
+			}
+		}
+	};
 };
 
 export default getState;
