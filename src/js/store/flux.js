@@ -5,12 +5,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 		},
 		actions: {
 			loadContacts: async () => {
-				const response = await fetch('/agendas/your-agenda-slug/contacts'); // Reemplaza 'your-agenda-slug'
-				const data = await response.json();
+				const response = await fetch('https://playground.4geeks.com/contact'); const data = await response.json();
 				setStore({ contacts: data.contacts });
 			},
 			addContact: async (contact) => {
-				const response = await fetch('/agendas/your-agenda-slug/contacts', {
+				const response = await fetch('https://playground.4geeks.com/contact/agendas/', {
 					method: 'POST',
 					headers: { 'Content-Type': 'application/json' },
 					body: JSON.stringify(contact),
@@ -20,7 +19,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 				}
 			},
 			deleteContact: async (contactId) => {
-				await fetch(`/agendas/your-agenda-slug/contacts/${contactId}`, { method: 'DELETE' });
+				await fetch(`https://playground.4geeks.com/contact/${contactId}`, { method: 'DELETE' });
 				getActions().loadContacts(); // Recargar contactos
 			}
 		}
