@@ -22,7 +22,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			loadContacts: () => {
 				// Cargar contactos desde la API
-				fetch("https://assets.breatheco.de/apis/fake/contact/agenda/your-agenda")
+				fetch("https://playground.4geeks.com/contact/agendas/migueluruguay", {
+					method: 'GET',
+					headers: { 'Content-Type': 'application/json' }
+				})
 					.then(response => response.json())
 					.then(data => setStore({ contacts: data }))
 					.catch(error => console.error(error));
@@ -30,23 +33,23 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			addContact: (contact) => {
 				// Añadir contacto
-				fetch("https://assets.breatheco.de/apis/fake/contact/", {
+				fetch("https://playground.4geeks.com/contact/agendas/migueluruguay", {
 					method: "POST",
 					headers: { "Content-Type": "application/json" },
 					body: JSON.stringify(contact)
 				})
-				.then(response => response.json())
-				.then(() => getActions().loadContacts()) // Recargar contactos después de añadir
-				.catch(error => console.error(error));
+					.then(response => response.json())
+					.then(() => getActions().loadContacts()) // Recargar contactos después de añadir
+					.catch(error => console.error(error));
 			},
 
 			deleteContact: (contactId) => {
 				// Eliminar contacto
-				fetch(`https://assets.breatheco.de/apis/fake/contact/${contactId}`, {
+				fetch(`https://playground.4geeks.com/contact/agendas/migueluruguay?${contactId}`, {
 					method: "DELETE"
 				})
-				.then(() => getActions().loadContacts()) // Recargar contactos después de eliminar
-				.catch(error => console.error(error));
+					.then(() => getActions().loadContacts()) // Recargar contactos después de eliminar
+					.catch(error => console.error(error));
 			},
 
 			changeColor: (index, color) => {
