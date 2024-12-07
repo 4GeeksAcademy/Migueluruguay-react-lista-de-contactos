@@ -12,7 +12,13 @@ export const Single = (props) => {
 			{contact && (
 				<>
 					<p>Teléfono: {contact.phone}</p>
-					<p>Email: {contact.email}</p>
+					<p>Email: {contact.email}
+						<p>Dirección: {contact.addres}
+							<p>nombre: {contact.name}
+
+							</p>
+						</p>
+					</p>
 				</>
 			)}
 			<a href="/" className="btn btn-primary btn-lg">Volver a la lista</a>

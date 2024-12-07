@@ -1,30 +1,16 @@
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
-			contacts: [], // Aquí se almacenarán los contactos
-			demo: [
-				{
-					title: "FIRST",
-					background: "white",
-					initial: "white"
-				},
-				{
-					title: "SECOND",
-					background: "white",
-					initial: "white"
-				}
-			]
+			contacts: [] // Aquí se almacenarán los contactos
 		},
 		actions: {
-			exampleFunction: () => {
-				getActions().changeColor(0, "green");
-			},
-
 			loadContacts: () => {
 				// Cargar contactos desde la API
 				fetch("https://playground.4geeks.com/contact/agendas/migueluruguay", {
 					method: 'GET',
-					headers: { 'Content-Type': 'application/json' }
+					headers: {
+						'Content-Type': 'application/json'
+					}
 				})
 					.then(response => response.json())
 					.then(data => setStore({ contacts: data }))
@@ -45,20 +31,11 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 			deleteContact: (contactId) => {
 				// Eliminar contacto
-				fetch(`https://playground.4geeks.com/contact/agendas/migueluruguay?${contactId}`, {
+				fetch(`https://playground.4geeks.com/contact/agendas/migueluruguay/${contactId}`, {
 					method: "DELETE"
 				})
 					.then(() => getActions().loadContacts()) // Recargar contactos después de eliminar
 					.catch(error => console.error(error));
-			},
-
-			changeColor: (index, color) => {
-				const store = getStore();
-				const demo = store.demo.map((elm, i) => {
-					if (i === index) elm.background = color;
-					return elm;
-				});
-				setStore({ demo: demo });
 			}
 		}
 	};
